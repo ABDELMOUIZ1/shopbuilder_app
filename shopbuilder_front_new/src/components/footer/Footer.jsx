@@ -2,34 +2,49 @@ import React from 'react';
 import './Footer.css';
 import logoFooter from '../../assets/logo_footer.png';
 import logo from '../../assets/logo.png';
-
+ 
 const Footer = () => {
     const getCurrentYear = () => {
         return new Date().getFullYear();
     };
+
     return (
-        <footer>
-            <div className="footer-content">
-                <div className="footer-subscribe">
-                    <p>S'abonner</p>
-                    <span>dernières actualités</span>
-                    <div>
-                        <input type="email" placeholder="Votre e-mail" />
-                        <button>S'abonner</button>
-                    </div>
+        <div>
+            <div className="footer-container">
+                <div className="subscription-box">
+                    <h2>S'abonner
+                        <span className="highlight">dernières actualités</span>
+                    </h2>
+                    <form>
+                        <input type="email" placeholder="Votre e-mail" required />
+                        <button type="submit">S'abonner</button>
+                    </form>
                 </div>
                 <div className="footer-logo">
-                    <img src={logoFooter} alt="ShopBuilder Footer Logo" />
+                    <img src={logo} alt="Logo" />
                 </div>
             </div>
-            <div className="footer-bottom">
-                <img src={logo} alt="ShopBuilder Logo" className='footer-bottom-logo' />
-                <p>Ce site web facilite la création de sites e-commerce pour ceux qui trouvent WordPress difficile. Via une interface simple, les utilisateurs peuvent fournir des informations de base, ajouter des produits et créer des promotions, le tout sans compétences en programmation.</p>
-                <p>E-mail: Infos@Shopbuilder.com</p>
-                <p>Fix: +212 603757443</p>
-                <p>Copyright © {getCurrentYear()} Powered by <a href="https://pulse.digital/"> PULSE.digital</a></p>
-            </div>
-        </footer>
+            <footer className="footerr">
+                <div className="footer-content-wrapper">
+                    <div className="footer-content">
+                        <img src={logoFooter} alt="ShopBuilder Logo" />
+                        <p>
+                            Ce site web facilite la création de sites e-commerce pour ceux qui<br />
+                            n'ont aucune formation officielle. Ventes faciles et simples,<br />
+                            avec des milliers de produits de commerce en gros. Accès en continu,<br />
+                            mise en page premium, et une équipe compétente en programmation.
+                        </p>
+                    </div>
+                    <div className="contact-info">
+                        <p>E-mail: info@shopbuilder.com</p>
+                        <p>Tel: +212 610573493</p>
+                    </div>
+                </div>
+                <div className="footer-bottom">
+                    <p>Copyright © {getCurrentYear()} Powered by <a href="https://pulse.digital/"> PULSE.digital</a></p>
+                </div>
+            </footer>
+        </div>
     );
 }
 

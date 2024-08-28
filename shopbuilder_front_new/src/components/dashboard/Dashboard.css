@@ -1,0 +1,333 @@
+#Intro {
+
+
+    width: 98.71vw;
+    height: 100vh; /* Takes the full height of the viewport */
+    margin: 0 auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: -4.7rem;
+    background: rgba(234, 53, 53, 0.9);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#Intro .container {
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+#Intro .hello {
+    font-size: 3rem;
+    font-weight: 500;
+    padding-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: rgb(181, 179, 179);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#Intro .introText {
+    color: rgb(181, 179, 179);
+    display: block;
+    font-size: 3.5rem;
+    line-height: 1.2;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#Intro .introName {
+    color: rgb(243, 243, 180);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    cursor: pointer;
+}
+
+#Intro .changing-text {
+    font-size: 3.5rem;
+    color: rgb(181, 179, 179);
+    border-right: 0.1em solid rgb(181, 179, 179);
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    animation: blink-caret 0.50s step-end infinite;
+}
+
+#Intro .carousel {
+    position: relative;
+    left: 11rem;
+    width: 90%;
+    height: 450px; /* Adjust as needed */
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    perspective: 1000px; /* Add perspective for 3D effect */
+}
+
+#Intro .carousel-image {
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    opacity: 0;
+    transform: scale(0.8) translateX(-1000px);
+    border-radius: 3rem;
+}
+
+#Intro .carousel-image.center {
+    transform: scale(1) translateX(0);
+    opacity: 1;
+    z-index: 2;
+}
+
+#Intro .carousel-image.left {
+    transform: scale(0.8) translateX(-300px);
+    opacity: 0.5;
+    z-index: 1;
+}
+
+#Intro .carousel-image.right {
+    transform: scale(0.8) translateX(300px);
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.avantagecont {
+    margin-top: -5rem;
+    padding: 20px;
+    background-image: url('../../assets/pic1.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white;
+    box-sizing: border-box;
+}
+
+.avantagecont .container {
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+.avantagecont::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    z-index: 0;
+}
+
+.avantagecont .secTitle {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.avantagecont .secTitle .title {
+    font-size: 2.5em;
+    color: white;
+}
+
+.avantagecont .left, .avantagecont .middle, .avantagecont .right {
+    flex: 1;
+    padding: 20px;
+    position: relative;
+}
+
+.avantagecont .left ul, .avantagecont .right ul {
+    list-style: none;
+    padding: 0;
+}
+
+.avantagecont .left li, .avantagecont .right li {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: white;
+}
+
+.avantagecont .middle {
+    text-align: center;
+    font-size: 2em;
+    color: white;
+}
+
+.avantagecont .imgqst {
+    display: none;
+}
+
+.avantagecont .btnContainer {
+    text-align: center;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.avantagecont .btnavt {
+    background-color: #ff3c00;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.avantagecont .btnavt:hover{
+    transform: scale(1.2);
+}
+
+.avantagecont .btnavt a {
+    color: white;
+    text-decoration: none;
+}
+
+#templates {
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: rgba(245, 245, 220, 0.8);
+    background-position: center;
+    position: relative;
+    color: rgb(228, 85, 85);
+    box-sizing: border-box;
+}
+#templates .templatesTitle{
+    font-size: 3rem;
+    font-weight: 600;
+    padding-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#templates .templatesDesc{
+    font-weight: 400;
+    font-size:1.5rem ;
+    max-width: 51rem;
+    padding: 0 2rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#templates .horizontal-scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    position: relative;
+    left: 2rem;
+    justify-content: center;
+    align-items: center;
+    width: 90%; /* Adjust as needed */
+    margin: 2rem;
+}
+
+#templates .horizontal-scroll-content {
+    display: inline-flex;
+    gap: 10px; /* Space between images */
+}
+
+#templates .scroll-image {
+    height: 380px; /* Adjust height as needed */
+    width: 35rem; /* Maintain aspect ratio */
+    display: inline-block;
+    border-radius: 3rem;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+#ContactPage{
+    overflow: hidden;
+    width: 100vw;
+    max-width: 65rem;
+    display: flex;
+    background-color: rgba(240, 255, 255,0.8);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#ContactPage .contactTitle{
+    font-size: 3rem;
+    font-weight: 600;
+    padding-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#ContactPage .contactDesc{
+    font-weight: 400;
+    font-size:1.5rem ;
+    max-width: 51rem;
+    padding: 0 2rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#ContactPage .contactForm{
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90vw;
+    max-width: 60rem;
+}
+
+#ContactPage .name, .email, .msg{
+    font-size: medium;
+    width: 100%;
+    max-width: 40rem;
+    margin: 0.5rem;
+    padding:0.5rem 1rem ;
+    border: none;
+    color: white;
+    border-radius: 0.5rem;
+    background: rgb(228, 121, 121);
+}
+
+#ContactPage .submitBtn{
+    background: rgb(228, 121, 121);
+    color: black;
+    border: none;
+    border-radius: 0.5rem;
+    margin: 2rem;
+    padding: 0.75rem 3.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    text-align: center;
+    width: 40px;
+}
+#ContactPage .submitBtn span{
+
+    position: relative;
+    left: -1.2rem;
+}
+
+#ContactPage .submitBtn:hover{
+    transform: scale(1.1);
+
+}
+#ContactPage .Links{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#ContactPage .LinkedInImg{
+    object-fit: cover;
+    height: 3rem;
+    width: 3rem;
+    margin: 0 0.75rem;
+}

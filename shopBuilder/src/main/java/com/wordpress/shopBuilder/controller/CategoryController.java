@@ -1,6 +1,5 @@
 package com.wordpress.shopBuilder.controller;
 
-import com.wordpress.shopBuilder.config.JwtConfig;
 import com.wordpress.shopBuilder.dto.CategoryDto;
 import com.wordpress.shopBuilder.dto.CategoryResponseDto;
 import com.wordpress.shopBuilder.model.Category;
@@ -21,32 +20,27 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private JwtConfig jwtConfig;
+
 
 
     @GetMapping
     public ResponseEntity<List<CategoryResponseDto>> getAllCategories() {
 
+        System.out.println("tongooooooo get All Categories");
         List<CategoryResponseDto> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
     @PostMapping
-    public ResponseEntity<String> addCategory(@RequestBody CategoryDto categoryDto, @CookieValue("wpToken") String wpToken, @RequestHeader("Authorization") String authorizationHeader) throws IOException {
+    public ResponseEntity<String> addCategory(@RequestBody CategoryDto categoryDto, @CookieValue("wpToken") String wpToken) throws IOException {
 
         System.out.println("controller");
         System.out.println(categoryDto);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String jwtToken = authorizationHeader.substring(7); // Extract JWT token from Authorization header
 
-            // Validate JWT token
-            if (jwtConfig.validateToken(jwtToken)) {
 
                 return categoryService.addCategory(categoryDto, wpToken);
-            }
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+
     }
 
 

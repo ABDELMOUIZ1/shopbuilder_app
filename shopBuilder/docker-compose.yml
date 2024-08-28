@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shop_builder_app
+    ports:
+      - "8088:8088"
+    networks:
+      - backend
+    depends_on:
+      - db
+      - wordpress_db
+      - wordpress
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 0000
+      MYSQL_DATABASE: shopbuilder
+    ports:
+      - "3308:3306"  # Change the host port to 3308
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+
+  wordpress_db:
+    image: mysql:8.0
+    container_name: wordpress_mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 0000
+      MYSQL_DATABASE: wordpress
+    ports:
+      - "3307:3306"
+    volumes:
+      - wordpress_mysql_data:/var/lib/mysql
+    networks:
+      - backend
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress_local
+    environment:
+      WORDPRESS_DB_HOST: wordpress_db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: 0000
+    ports:
+      - "8000:80"
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - backend
+    depends_on:
+      - wordpress_db
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  wordpress_data:
+  wordpress_mysql_data:

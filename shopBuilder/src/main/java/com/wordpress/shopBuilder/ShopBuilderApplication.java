@@ -1,8 +1,12 @@
 package com.wordpress.shopBuilder;
 
+import com.wordpress.shopBuilder.config.RsakeysConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -10,12 +14,17 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
 @SpringBootApplication
+@EnableConfigurationProperties(RsakeysConfig.class)
 public class ShopBuilderApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ShopBuilderApplication.class, args);
 	}
 
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
 
 
 	@Bean

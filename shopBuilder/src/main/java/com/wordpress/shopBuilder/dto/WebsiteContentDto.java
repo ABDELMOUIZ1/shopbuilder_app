@@ -12,4 +12,14 @@ public class WebsiteContentDto {
 
     private String title;
     private Integer site_logo;
+    private String backgroundColor;
+    private String fontFamily;
+    private String backgroundImageHome;
+    private String backgroundImageContact;
+    private String backgroundImageAbout;
+    private String homePic; // Changed to MultipartFile
+    private String homeDesc;
 }
+
+
+

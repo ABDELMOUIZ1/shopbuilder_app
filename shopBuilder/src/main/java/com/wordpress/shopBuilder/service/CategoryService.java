@@ -2,6 +2,7 @@ package com.wordpress.shopBuilder.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wordpress.shopBuilder.config.JwtUtil;
 import com.wordpress.shopBuilder.dto.CategoryDto;
 import com.wordpress.shopBuilder.dto.CategoryResponseDto;
 import com.wordpress.shopBuilder.model.Category;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -19,16 +21,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
+
     private final WebClient webClient;
 
     @Autowired
     public CategoryService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost").build();
+        this.webClient = webClientBuilder.build();
     }
 
     public List<CategoryResponseDto> getAllCategories() {
@@ -37,8 +41,14 @@ public class CategoryService {
     }
 
     public ResponseEntity<String> addCategory(CategoryDto categoryDto, String wpToken) throws IOException {
+        // Decode the JWT to get the domain name
+        JsonNode decodedJwt = JwtUtil.decodeJwt(wpToken);
+        String domaineName = decodedJwt.get("iss").asText(); // Extract the "iss" field
+
+
         System.out.println("service");
-        String url = "/wordpress/wp-json/wc/v3/products/categories";
+        String url = domaineName + "/wp-json/wc/v3/products/categories";
+
 
         Mono<String> responseMono = webClient.post()
                 .uri(url)

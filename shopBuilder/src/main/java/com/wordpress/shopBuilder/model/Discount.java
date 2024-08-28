@@ -15,7 +15,7 @@ import java.util.Set;
 public class Discount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_discount")
     private int idDiscount;
     private String code;
     private String discountType; // e.g., 'percent'
@@ -25,10 +25,9 @@ public class Discount {
     private String minimumAmount;
     private String description;
     private int usageLimit;
-    private LocalDateTime dateCreated;
     private LocalDateTime dateExpires;
 
-    @ManyToMany(mappedBy = "discounts")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "discounts")
     private Set<Product> products;
 
     // Getters and Setters

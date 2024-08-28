@@ -7,7 +7,7 @@ import img2 from '../../assets/po.jpg';
 import webcamIcon from '../../assets/vv.jpg';
 import './Prof.css';
 
-function UserProfileCard({ onClose, firstName, lastName }) {
+function UserProfileCard({ onClose, firstName, lastName, email, onLogout }) {
     const handleWebcamClick = () => {
         console.log('Webcam icon clicked!');
     };
@@ -23,39 +23,34 @@ function UserProfileCard({ onClose, firstName, lastName }) {
             </div>
             <div className="user-info">
                 <h2>{`${firstName} ${lastName}`}</h2>
-                <p>Nomprenom@gmail.com</p>
+                <p>{email}</p>
                 <div className="user-actions">
-                    <button>Informations</button>
-                    <button>Aide</button>
-                    <button>Déconnexion</button>
-                    <button>Mode Sombre</button>
+                    <button onClick={onLogout}>Déconnexion</button>
                 </div>
             </div>
         </div>
     );
 }
 
-function Prof() {
+function Prof({ onLogout }) {
     const [isCardVisible, setIsCardVisible] = useState(false);
-    const [userName, setUserName] = useState({ firstName: '', lastName: '' });
+    const [userInfo, setUserInfo] = useState({ firstName: '', lastName: '', email: '' });
     const navigate = useNavigate();
 
     useEffect(() => {
         // Check for JWT token in cookies
         const token = Cookies.get('jwt');
         if (!token) {
-            // Redirect to login if no token is found
             navigate('/login');
             return;
         }
 
         try {
-            // Decode the token to extract user info
             const decodedToken = jwtDecode(token);
-            // Assuming the token payload contains firstName and lastName
-            setUserName({
+            setUserInfo({
                 firstName: decodedToken.firstName || '',
-                lastName: decodedToken.lastName || ''
+                lastName: decodedToken.lastName || '',
+                email: decodedToken.email || 'No email provided'
             });
         } catch (error) {
             console.error('Failed to decode token:', error);
@@ -71,22 +66,27 @@ function Prof() {
         setIsCardVisible(false);
     };
 
+    const handleRedirect = (path) => {
+        navigate(path);
+    };
 
-    const handleRedirect = () => {
-        navigate('/form');
-    };
-    const handleRedirect2 = () => {
-        navigate('/form2');
-    };
     return (
         <div className="container">
-            {isCardVisible && <UserProfileCard onClose={handleCloseCard} firstName={userName.firstName} lastName={userName.lastName} />}
+            {isCardVisible && (
+                <UserProfileCard
+                    onClose={handleCloseCard}
+                    firstName={userInfo.firstName}
+                    lastName={userInfo.lastName}
+                    email={userInfo.email}
+                    onLogout={onLogout} // Use the onLogout prop passed from App
+                />
+            )}
             <header className="header">
                 <h1>Votre Espace Client</h1>
                 <div className="greeting-stats-container">
                     <img src={img1} alt="Descriptive Text" className="left-image" />
                     <div className="greeting-stats">
-                        <p className="greeting">Bonjour, {userName.firstName} {userName.lastName}</p>
+                        <p className="greeting">Bonjour, {userInfo.firstName} {userInfo.lastName}</p>
                     </div>
                 </div>
             </header>
@@ -101,16 +101,16 @@ function Prof() {
                     <div className="content">
                         <div className="buttons">
                             <div className="button-container">
-                                <button className="button1" onClick={handleRedirect}>Modifier le contenu du site web</button>
+                                <button className="button1" onClick={() => handleRedirect('/form')}>Modifier le contenu du site web</button>
                             </div>
                             <div className="button-container">
-                                <button className="button2" onClick={handleRedirect2}>Ajouter un produit</button>
+                                <button className="button2" onClick={() => handleRedirect('/form2')}>Ajouter un produit</button>
                             </div>
                             <div className="button-container">
-                                <button className="button3">Ajouter un package</button>
+                                <button className="button3" onClick={() => handleRedirect('/form3')}>Ajouter un package</button>
                             </div>
                             <div className="button-container">
-                                <button className="button4">Ajouter une promotion</button>
+                                <button className="button4" onClick={() => handleRedirect('/form4')}>Ajouter une promotion</button>
                             </div>
                         </div>
                     </div>

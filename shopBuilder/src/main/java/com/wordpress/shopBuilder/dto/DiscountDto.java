@@ -20,6 +20,5 @@ public class DiscountDto {
     private List<Integer> product_ids;
     private String description;
     private int usage_limit;
-    private LocalDateTime date_created;
     private LocalDateTime date_expires;
 }

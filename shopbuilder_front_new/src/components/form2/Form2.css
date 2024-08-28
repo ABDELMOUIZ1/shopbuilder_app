@@ -1,60 +1,70 @@
+/* General Form Styles */
 .product-form {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
     background-color: rgba(255, 75, 75, 0.8); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: #fff;
+    width: 60%; /* Adjusted width to make the form more compact */
+    margin: auto;
+    align-items: center; /* Center the form elements */
+    margin-bottom: 100px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: #fff;
+    border: 1px solid white; /* White border */
+    width: 100%; /* Make the group take the full width of the form */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Center the text inside the form-group */
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .form-group input,
+.form-group select,
 .form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+.form-group .color-picker {
+    width: 80%; /* Reduced width to make the inputs smaller */
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 10px;
+    text-align: center; /* Center the text inside the inputs */
+    max-width: 100%;
 }
 
-.form-group button {
-    padding: 10px 15px;
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ensure the buttons take full width */
+}
+
+.form-buttons .prev-button,
+.form-buttons .next-button {
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
-    background-color: #007bff;
+    border-radius: 5px;
+    background-color: #333;
     color: white;
     cursor: pointer;
-    font-size: 16px;
 }
 
-.form-group button:hover {
-    background-color: #0056b3;
+.form-buttons .prev-button:hover,
+.form-buttons .next-button:hover {
+    background-color: #555;
 }
 
-.image-preview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.image-preview img {
-    max-width: 100px;
-    max-height: 100px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    object-fit: cover;
-}
-
+/* Popup Styles */
 .popup {
     position: fixed;
     top: 0;
@@ -65,25 +75,154 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    z-index: 1000; /* Ensure popup is above other content */
 }
 
+/* Popup Content Styles */
 .popup-content {
-    background-color: rgba(255, 75, 75, 0.8); /* Semi-transparent background */
+    background-color: rgba(255, 75, 75, 0.9); /* Slightly more opaque background */
     padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
+    border-radius: 10px;
+    max-width: 500px; /* Adjust width for better content fit */
     width: 100%;
+    box-shadow: 0 0 0 2px white; /* White border effect around the popup content */
+    box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
 }
 
 .popup-content h2 {
     margin-top: 0;
+    color: #fff; /* Ensure heading text is white */
 }
 
+.popup-content .form-group {
+    margin-bottom: 15px; /* Adjusted margin for better spacing */
+    width: 100%; /* Ensure full width of form-group inside popup */
+    padding: 10px; /* Add padding to ensure spacing around the content */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+.popup-content .form-group label {
+    margin-bottom: 5px;
+    color: #fff; /* Ensure label text is white */
+}
+
+.popup-content .form-group input,
+.popup-content .form-group textarea,
+.popup-content .form-group select {
+    width: 100%; /* Full width of the form-group container */
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid white; /* White border for the form fields */
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's width */
+    background-color: rgba(0, 0, 0, 0.2); /* Slightly dark background for contrast */
+    color: #fff; /* Text color inside the fields */
+}
+
+/* Button Styles Inside Popup */
 .popup-content .form-group button {
-    background-color: #28a745;
+    background-color: #28a745; /* Consistent with button color scheme */
+    margin-right: 10px; /* Added margin for spacing between buttons */
 }
 
 .popup-content .form-group button:hover {
     background-color: #218838;
+}
+
+/* Additional Button Style Adjustments */
+.popup-content .form-group .cancel-button {
+    background-color: #dc3545; /* Different color for cancel button */
+}
+
+.popup-content .form-group .cancel-button:hover {
+    background-color: #c82333;
+}
+
+/* Dropdown Container */
+.dropdown-container {
+    position: relative; /* Ensure the dropdown is positioned relative to this container */
+    width: 80%; /* Adjust width as needed */
+}
+
+/* Dropdown Button */
+.dropdown-button {
+    background-color: rgba(255, 75, 75, 0.8); /* Semi-transparent background */
+    color: #fff; /* Text color */
+    padding: 10px;
+    border: 1px solid white; /* White border */
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* Center the text */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in width calculations */
+}
+
+
+
+/* Dropdown Content */
+.dropdown-content {
+    display: block; /* Show the dropdown content */
+    position: absolute;
+    background-color: rgba(255, 75, 75, 0.9); /* Slightly more opaque background */
+    border: 1px solid white; /* White border around dropdown */
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%; /* Full width of the dropdown container */
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+    max-height: 200px; /* Set a maximum height */
+    overflow-y: auto; /* Add scroll if content overflows */
+    z-index: 999; /* Ensure it is on top of other elements, but below the popup */
+}
+
+
+/* Checkbox Item */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    margin-bottom: 5px;
+    justify-content: flex-start; /* Ensures content is aligned to the left */
+
+
+}
+
+.checkbox-item input {
+    margin-right: 10px;
+}
+
+.checkbox-item:hover {
+    background-color: rgba(255, 75, 75, 0.5); /* Slightly more opaque background */
+}
+
+
+/* Add New Category Button */
+.add-category-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Styles for image preview */
+.image-preview {
+    display: flex;
+    flex-wrap: wrap; /* Allow images to wrap to the next line if needed */
+    gap: 10px; /* Space between images */
+}
+
+.image-preview img {
+    max-width: 150px; /* Set the maximum width for the images */
+    max-height: 150px; /* Set the maximum height for the images */
+    object-fit: cover; /* Ensure images cover the area without distortion */
+    border-radius: 5px; /* Optional: add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Optional: add shadow for better visual effect */
+}
+
+.checkbox-item label {
+    display: flex;
 }

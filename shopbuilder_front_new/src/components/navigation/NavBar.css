@@ -50,3 +50,39 @@
 {
     color: white;
 }
+.user-info {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.dropdown-menu button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.dropdown-menu button:hover {
+    background-color: #f0f0f0;
+}

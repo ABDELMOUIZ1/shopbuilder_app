@@ -1,6 +1,7 @@
 package com.wordpress.shopBuilder.service;
 
-import com.wordpress.shopBuilder.config.JwtConfig;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import com.wordpress.shopBuilder.dto.UserLoginDto;
 import com.wordpress.shopBuilder.dto.UserRegistrationDto;
 import com.wordpress.shopBuilder.model.User;
@@ -11,52 +12,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtConfig jwtConfig;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtEncoder jwtEncoder;
+
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     private final WebClient webClient;
 
     @Autowired
     public UserService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost").build();
+        this.webClient = webClientBuilder.build();
     }
 
     public ResponseEntity<String> registerUser(UserRegistrationDto registrationDto) {
-        String username = registrationDto.getUsername();
-        String password = registrationDto.getPassword();
-
         // Check if the user already exists
-        Optional<User> existingUser = userRepository.findByUsername(username);
+        Optional<User> existingUser = userRepository.findByUsername(registrationDto.getUsername());
         if (existingUser.isPresent()) {
             return ResponseEntity.badRequest().body("User already registered");
         }
 
+        String username = registrationDto.getUsername();
+        String password = registrationDto.getPassword();
+        String domaineName = registrationDto.getDomaineName();
+
         // Check if the username and password match the WordPress account
-        String wpToken = getWordPressToken(username, password);
+        String wpToken = getWordPressToken(username, password, domaineName);
         if (wpToken == null) {
             return ResponseEntity.badRequest().body("Invalid WordPress credentials");
         }
 
         // Encode the password before saving
-        registrationDto.setPassword(bCryptPasswordEncoder.encode(password));
+        registrationDto.setPassword(passwordEncoder.encode(password));
 
         // Save user to the database
         User user = new User();
@@ -76,32 +94,52 @@ public class UserService {
         String username = loginDto.getUsername();
         String password = loginDto.getPassword();
 
-        Optional<User> optionalUser = userRepository.findByUsername(username);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
+
+        Optional<User> optionalUser = userRepository.findByUsername(loginDto.getUsername());
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
-                String wpToken = getWordPressToken(username, password);
-                if (wpToken == null) {
-                    return ResponseEntity.badRequest().body(Map.of("message", "Invalid WordPress credentials"));
-                }
+            String domaineName = user.getDomaineName();
 
-                // Generate JWT token
-                String jwt = jwtConfig.generateToken(user.getIdUser(), user.getEmail(), user.getDomaineName(), user.getFirstName(), user.getLastName());
-
-                Map<String, String> response = new HashMap<>();
-                response.put("wpToken", wpToken);
-                response.put("jwt", jwt);
-                System.out.println(response);
-
-                return ResponseEntity.ok(response);
+            String wpToken = getWordPressToken(username, password, domaineName);
+            if (wpToken == null) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Invalid WordPress credentials"));
             }
+
+            // Generate JWT token with additional claims
+            Instant instant = Instant.now();
+            String scope = authentication.getAuthorities().stream()
+                    .map(auth -> auth.getAuthority())
+                    .collect(Collectors.joining(" "));
+
+            JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
+                    .subject(authentication.getName())
+                    .issuedAt(instant)
+                    .expiresAt(instant.plus(50, ChronoUnit.MINUTES))
+                    .issuer("shopbuilder")
+                    .claim("scope", scope)
+                    .claim("userId", user.getIdUser())
+                    .claim("email", user.getEmail())
+                    .claim("domaineName", user.getDomaineName())
+                    .claim("firstName", user.getFirstName())
+                    .claim("lastName", user.getLastName())
+                    .build();
+
+            String jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
+
+            Map<String, String> response = new HashMap<>();
+            response.put("wpToken", wpToken);
+            response.put("jwt", jwt);
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.badRequest().body(Map.of("message", "Invalid credentials"));
     }
 
-    private String getWordPressToken(String username, String password) {
-        String url = "/wordpress/wp-json/jwt-auth/v1/token?username=" + username + "&password=" + password;
+    private String getWordPressToken(String username, String password, String domaineName) {
+        String url = domaineName + "/wp-json/jwt-auth/v1/token?username=" + username + "&password=" + password;
         Mono<WordPressTokenResponse> responseMono = webClient.post()
                 .uri(url)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

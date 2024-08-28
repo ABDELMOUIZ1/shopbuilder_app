@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import './Form2.css'; // Adjust as needed
+import './Form2.css'; // Ensure this path is correct
 
 const Form2 = () => {
     const [productName, setProductName] = useState('');
@@ -14,23 +14,43 @@ const Form2 = () => {
     const [newCategory, setNewCategory] = useState({ name: '', slug: '', description: '' });
     const [showCategoryPopup, setShowCategoryPopup] = useState(false);
     const [selectedImages, setSelectedImages] = useState([]);
-    const [imageUrls, setImageUrls] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:8088/api/categories');
-                setCategories(response.data);
+                const jwtToken = Cookies.get('jwt');
+
+                if (!jwtToken) {
+                    console.log('No JWT token found, redirecting to login...');
+                    navigate('/login');
+                    return;
+                }
+
+                const response = await axios.get('http://localhost:8088/api/categories', {
+                    headers: {
+                        Authorization: `Bearer ${jwtToken}`,
+                    },
+                });
+
+                // Ensure the response is an array before setting it
+                if (Array.isArray(response.data)) {
+                    setCategories(response.data);
+                } else {
+                    console.error('Unexpected response format:', response.data);
+                    setCategories([]); // Set an empty array if the response is not an array
+                }
             } catch (error) {
                 console.error('Error fetching categories:', error);
+                setCategories([]); // Ensure categories is always an array
             }
         };
 
         fetchCategories();
-    }, []);
+    }, [navigate]);
 
     const handleCategoryChange = (e) => {
         const { value, checked } = e.target;
@@ -44,7 +64,14 @@ const Form2 = () => {
     };
 
     const handleFileChange = (e) => {
-        setSelectedImages(Array.from(e.target.files));
+        const files = Array.from(e.target.files);
+        setSelectedImages(files);
+
+        // Revoke previous object URLs to avoid memory leaks
+        files.forEach(file => {
+            URL.revokeObjectURL(file.preview);
+            file.preview = URL.createObjectURL(file);
+        });
     };
 
     const uploadImages = async () => {
@@ -159,11 +186,16 @@ const Form2 = () => {
         }
     };
 
+    const toggleDropdown = () => {
+        console.log('Toggling dropdown');
+        setDropdownOpen(prev => !prev);
+    };
+
     return (
         <div>
             <form className="product-form" onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>Product Name:</label>
+                    <label>Nom du produit :</label>
                     <input
                         type="text"
                         value={productName}
@@ -172,7 +204,7 @@ const Form2 = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Price:</label>
+                    <label>Prix:</label>
                     <input
                         type="number"
                         value={price}
@@ -189,7 +221,7 @@ const Form2 = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Short Description:</label>
+                    <label>Courte description :</label>
                     <textarea
                         value={shortDescription}
                         onChange={(e) => setShortDescription(e.target.value)}
@@ -197,21 +229,36 @@ const Form2 = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Categories:</label>
-                    <div className="checkbox-list">
-                        {categories.map(category => (
-                            <div key={category.idCategory} className="checkbox-item">
-                                <input
-                                    type="checkbox"
-                                    id={`category-${category.idCategory}`}
-                                    value={category.idCategory}
-                                    checked={selectedCategories.some(selected => selected.id === category.idCategory)}
-                                    onChange={handleCategoryChange}
-                                />
-                                <label htmlFor={`category-${category.idCategory}`}>{category.name}</label>
+                    <label >Catégories :</label>
+                    <div className="dropdown-container">
+                        <button type="button" className="dropdown-button" onClick={toggleDropdown}>
+                            {selectedCategories.length ? `${selectedCategories.length} Category(s) Selected` : 'Select Categories'}
+                        </button>
+                        {dropdownOpen && (
+                            <div className="dropdown-content">
+                                {categories.length > 0 ? (
+                                    categories.map(category => (
+                                        <div key={category.idCategory} className="checkbox-item">
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    id={`category-${category.idCategory}`}
+                                                    value={category.idCategory}
+                                                    checked={selectedCategories.some(selected => selected.id === category.idCategory)}
+                                                    onChange={handleCategoryChange}
+                                                />
+                                                <label htmlFor={`category-${category.idCategory}`}>{category.name}</label>
+                                            </label>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>Aucune catégorie disponible</p>
+                                )}
+                                <button type="button" className="add-category-button" onClick={() => setShowCategoryPopup(true)}>
+                                    Ajouter une nouvelle catégorie
+                                </button>
                             </div>
-                        ))}
-                        <button type="button" onClick={() => setShowCategoryPopup(true)}>Add New Category</button>
+                        )}
                     </div>
                 </div>
                 <div className="form-group">
@@ -223,14 +270,14 @@ const Form2 = () => {
                     />
                     {selectedImages.length > 0 && (
                         <div className="image-preview">
-                            {Array.from(selectedImages).map((image, index) => (
-                                <img key={index} src={URL.createObjectURL(image)} alt="Preview" />
+                            {selectedImages.map((image, index) => (
+                                <img key={index} src={image.preview} alt="Preview" />
                             ))}
                         </div>
                     )}
                 </div>
                 <button type="submit" disabled={loading}>
-                    {loading ? 'Submitting...' : 'Add Product'}
+                    {loading ? 'Soumission en cours...' : 'Ajouter un produit'}
                 </button>
                 {message && <div className="message">{message}</div>}
             </form>
@@ -238,35 +285,35 @@ const Form2 = () => {
             {showCategoryPopup && (
                 <div className="popup">
                     <div className="popup-content">
-                        <h2>Add New Category</h2>
+                        <h2>Ajouter une Nouvelle Categorie: </h2>
                         <div className="form-group">
-                            <label>Name:</label>
+                            <label>Nom :</label>
                             <input
                                 type="text"
                                 value={newCategory.name}
-                                onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                                onChange={(e) => setNewCategory(prev => ({ ...prev, name: e.target.value }))}
                                 required
                             />
                         </div>
                         <div className="form-group">
-                            <label>Slug:</label>
+                            <label>Slug :</label>
                             <input
                                 type="text"
                                 value={newCategory.slug}
-                                onChange={(e) => setNewCategory({ ...newCategory, slug: e.target.value })}
+                                onChange={(e) => setNewCategory(prev => ({ ...prev, slug: e.target.value }))}
                                 required
                             />
                         </div>
                         <div className="form-group">
-                            <label>Description:</label>
+                            <label>Description :</label>
                             <textarea
                                 value={newCategory.description}
-                                onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+                                onChange={(e) => setNewCategory(prev => ({ ...prev, description: e.target.value }))}
                                 required
                             />
                         </div>
-                        <button onClick={handleAddCategory}>Add Category</button>
-                        <button onClick={() => setShowCategoryPopup(false)}>Cancel</button>
+                        <button onClick={handleAddCategory}>Ajouter</button>
+                        <button onClick={() => setShowCategoryPopup(false)}>Annuler</button>
                     </div>
                 </div>
             )}

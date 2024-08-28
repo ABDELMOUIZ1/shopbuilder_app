@@ -1,11 +1,13 @@
 package com.wordpress.shopBuilder.controller;
 
-import com.wordpress.shopBuilder.config.JwtConfig;
+import com.wordpress.shopBuilder.dto.BackgroundImageDto;
+import com.wordpress.shopBuilder.dto.PackImageDto;
 import com.wordpress.shopBuilder.dto.ProductImageDto;
 import com.wordpress.shopBuilder.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,28 +16,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "True")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MediaController {
 
     @Autowired
     private MediaService mediaService;
 
-    @Autowired
-    private JwtConfig jwtConfig;
 
     @PostMapping("/upload/images")
-    public ResponseEntity<?> uploadImages(@RequestParam("files") MultipartFile[] files,
-                                          @CookieValue("wpToken") String wpToken,
-                                          @RequestHeader("Authorization") String authorizationHeader) throws IOException {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
-        }
+    public ResponseEntity<?> uploadImages(@RequestParam("files") MultipartFile[] files, @CookieValue("wpToken") String wpToken) throws IOException {
 
-        String jwtToken = authorizationHeader.substring(7); // Extract JWT token from Authorization header
 
-        if (!jwtConfig.validateToken(jwtToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
-        }
 
         List<ProductImageDto> imageUrls = mediaService.uploadImages(files, wpToken);
         System.out.println("imagesUrls" + imageUrls);
@@ -45,17 +36,7 @@ public class MediaController {
 
     @PostMapping("/upload/image")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file,
-                                         @CookieValue("wpToken") String wpToken,
-                                         @RequestHeader("Authorization") String authorizationHeader) throws IOException {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
-        }
-
-        String jwtToken = authorizationHeader.substring(7); // Extract JWT token from Authorization header
-
-        if (!jwtConfig.validateToken(jwtToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
-        }
+                                         @CookieValue("wpToken") String wpToken) throws IOException {
 
         try {
             Integer imageId = mediaService.uploadImage(file, wpToken);
@@ -64,4 +45,24 @@ public class MediaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image: " + e.getMessage());
         }
     }
+
+
+
+    @PostMapping("/upload/images2")
+    public ResponseEntity<?> uploadImages2(@RequestParam("files") MultipartFile[] files, @CookieValue("wpToken") String wpToken) throws IOException {
+
+
+        List<PackImageDto> imageUrls = mediaService.uploadImages2(files, wpToken);
+        System.out.println("imagesUrls" + imageUrls);
+        return ResponseEntity.ok(imageUrls);
+    }
+
+    @PostMapping("/upload/images3")
+    public ResponseEntity<?> uploadImages3(@RequestParam("files") MultipartFile[] files, @CookieValue("wpToken") String wpToken) throws IOException {
+
+        List<BackgroundImageDto> imageUrls = mediaService.uploadImages3(files, wpToken);
+        System.out.println("imagesUrls" + imageUrls);
+        return ResponseEntity.ok(imageUrls);
+    }
+
 }

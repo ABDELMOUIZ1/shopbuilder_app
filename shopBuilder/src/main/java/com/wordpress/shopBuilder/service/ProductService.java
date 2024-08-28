@@ -3,9 +3,8 @@ package com.wordpress.shopBuilder.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wordpress.shopBuilder.dto.ProductCategoryDto;
-import com.wordpress.shopBuilder.dto.ProductDto;
-import com.wordpress.shopBuilder.dto.ProductImageDto;
+import com.wordpress.shopBuilder.config.JwtUtil;
+import com.wordpress.shopBuilder.dto.*;
 import com.wordpress.shopBuilder.model.Category;
 import com.wordpress.shopBuilder.model.Product;
 import com.wordpress.shopBuilder.repository.CategoryRepository;
@@ -19,8 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,11 +37,17 @@ public class ProductService {
 
     @Autowired
     public ProductService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost").build();
+        this.webClient = webClientBuilder.build();
     }
 
-    public ResponseEntity<String> addProduct(ProductDto productDto, String wpToken) throws JsonProcessingException {
-        String url = "/wordpress/wp-json/wc/v3/products";
+    public ResponseEntity<String> addProduct(ProductDto productDto, String wpToken) throws IOException {
+        // Decode the JWT to get the domain name
+        JsonNode decodedJwt = JwtUtil.decodeJwt(wpToken);
+        String domaineName = decodedJwt.get("iss").asText(); // Extract the "iss" field
+
+
+        System.out.println("service");
+        String url = domaineName + "/wp-json/wc/v3/products";
 
         Mono<String> responseMono = webClient.post()
                 .uri(url)
@@ -91,5 +99,17 @@ public class ProductService {
             images.add(imageDto.getSrc());
         }
         product.setProductImages(images);
+    }
+
+    public List<ProductResponseDto> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    private ProductResponseDto convertToDto(Product product) {
+        ProductResponseDto productResponseDto = new ProductResponseDto();
+        productResponseDto.setIdProduct(product.getIdProduct());
+        productResponseDto.setProductName(product.getProductName());
+        return productResponseDto;
     }
 }

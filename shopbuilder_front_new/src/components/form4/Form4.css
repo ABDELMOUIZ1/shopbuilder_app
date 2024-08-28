@@ -1,0 +1,131 @@
+/* General Form Styles */
+.form4-container {
+    background-color: rgba(255, 75, 75, 0.8); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: #fff;
+    width: 60%; /* Adjusted width to make the form more compact */
+    margin: auto;
+    align-items: center; /* Center the form elements */
+    margin-bottom: 100px;
+}
+
+/* Form styles */
+.form4 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Group styles */
+.form4-group {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: #fff;
+    border: 1px solid white; /* White border */
+    width: 100%; /* Make the group take the full width of the form */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Center the text inside the form-group */
+}
+
+/* Label styles */
+.form4-group label {
+    margin-bottom: 5px;
+}
+
+/* Input, textarea, and select styles */
+.form4-group input[type="text"],
+.form4-group input[type="number"],
+.form4-group input[type="datetime-local"],
+.form4-group textarea {
+    width: 80%; /* Adjust width */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc; /* Standard border */
+    margin-bottom: 10px;
+    text-align: center; /* Center the text inside the inputs */
+    max-width: 100%;
+}
+
+/* Dropdown Container */
+.dropdown-container {
+    position: relative; /* Ensure the dropdown is positioned relative to this container */
+    width: 80%; /* Adjust width as needed */
+}
+
+/* Dropdown Button */
+.dropdown-button {
+    background-color: rgba(255, 75, 75, 0.8); /* Semi-transparent background */
+    color: #fff; /* Text color */
+    padding: 10px;
+    border: 1px solid white; /* White border */
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* Center the text */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in width calculations */
+}
+
+
+
+/* Dropdown Content */
+.dropdown-content {
+    display: block; /* Show the dropdown content */
+    position: absolute;
+    background-color: rgba(255, 75, 75, 0.9); /* Slightly more opaque background */
+    border: 1px solid white; /* White border around dropdown */
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%; /* Full width of the dropdown container */
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+    max-height: 200px; /* Set a maximum height */
+    overflow-y: auto; /* Add scroll if content overflows */
+    z-index: 999; /* Ensure it is on top of other elements, but below the popup */
+}
+
+
+/* Checkbox Item */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    margin-bottom: 5px;
+    flex-direction: row;
+
+
+}
+
+.checkbox-item input {
+    margin-right: 10px;
+}
+
+.checkbox-item:hover {
+    background-color: rgba(255, 75, 75, 0.5); /* Slightly more opaque background */
+}
+
+/* Button styles */
+.form4 button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form4 button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Message styles */
+.form4-message {
+    color: #f00;
+    text-align: center;
+}

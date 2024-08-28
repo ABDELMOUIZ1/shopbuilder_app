@@ -15,22 +15,28 @@ import java.util.Set;
 public class Pack {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pack")
     private Long idPack;
-
+    private String type; // 'grouped'
     private String name;
+    private String description;
+    private String shortDescription;
     private double price;
-    private String image;
-    private LocalDateTime start;
-    private LocalDateTime end;
 
-    @ManyToMany
+
+    @ElementCollection
+    @CollectionTable(name = "pack_images", joinColumns = @JoinColumn(name = "id_pack"))
+    @Column(name = "image_url")
+    private Set<String> packImages;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "pack_product",
             joinColumns = @JoinColumn(name = "pack_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private Set<Product> products;
+
 
     // Getters and Setters
 }

@@ -20,10 +20,13 @@ public class WebsiteContent {
 
     private String webSiteName;
     private Integer logo;
-    private String description;
     private String themeColor;
     private String fontStyle;
-    private String status;
+    private String BackgroundImageHome;
+    private String BackgroundImageContact;
+    private String BackgroundImageAbout;
+    private String homePic; // Changed to MultipartFile
+    private String homeDesc;
 
     @OneToOne
     @JoinColumn(name = "website_id")

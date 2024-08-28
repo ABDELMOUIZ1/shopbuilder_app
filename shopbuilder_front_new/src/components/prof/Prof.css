@@ -58,6 +58,7 @@ body {
     overflow: hidden;
     text-align: center;
     padding: 10px;
+    z-index: 1001;
 }
 .user-profile-card .profile-container {
     position: relative;
@@ -99,25 +100,30 @@ body {
 }
 .user-profile-card .user-info {
     padding: 10px;
+    flex-direction: column; /* Stack children vertically */
+    text-align: center; /* Align text to the center */
 }
+
 .user-profile-card .user-info h2 {
-    margin: 5px 0;
+    margin: 10px 0; /* Space between name and email */
     font-size: 20px;
 }
 .user-profile-card .user-info p {
-    margin: 5px 0;
-    font-size: 13px;
+    margin: 10px 0; /* Space between email and button */
+    font-size: 14px; /* Slightly larger font for better readability */
     color: #555;
 }
+
 .user-profile-card .user-actions {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 20px; /* Add space between email and button */
 }
 .user-profile-card .user-actions button {
-    margin: 5px 0;
+    margin: 10px 0; /* Space between buttons if there are more than one */
     padding: 10px;
-    width: 90%;
+    width: 100%;
     border: none;
     background-color: #ffffff;
     color: black;

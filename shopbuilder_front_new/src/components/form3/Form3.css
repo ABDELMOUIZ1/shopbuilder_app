@@ -1,0 +1,146 @@
+/* General Form Styles */
+.pack-form {
+    background-color: rgba(255, 75, 75, 0.8); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: #fff;
+    width: 60%; /* Adjusted width to make the form more compact */
+    margin: auto;
+    align-items: center; /* Center the form elements */
+    margin-bottom: 100px;
+}
+
+.form-group {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: #fff;
+    border: 1px solid white; /* White border */
+    width: 100%; /* Make the group take the full width of the form */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Center the text inside the form-group */
+}
+
+.form-group label {
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.form-group .color-picker {
+    width: 80%; /* Reduced width to make the inputs smaller */
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 10px;
+    text-align: center; /* Center the text inside the inputs */
+    max-width: 100%;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ensure the buttons take full width */
+}
+
+.form-buttons .prev-button,
+.form-buttons .next-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+}
+
+.form-buttons .prev-button:hover,
+.form-buttons .next-button:hover {
+    background-color: #555;
+}
+
+
+/* Dropdown Container */
+.dropdown-container {
+    position: relative; /* Ensure the dropdown is positioned relative to this container */
+    width: 80%; /* Adjust width as needed */
+}
+
+/* Dropdown Button */
+.dropdown-button {
+    background-color: rgba(255, 75, 75, 0.8); /* Semi-transparent background */
+    color: #fff; /* Text color */
+    padding: 10px;
+    border: 1px solid white; /* White border */
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* Center the text */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in width calculations */
+}
+
+
+
+/* Dropdown Content */
+.dropdown-content {
+    display: block; /* Show the dropdown content */
+    position: absolute;
+    background-color: rgba(255, 75, 75, 0.9); /* Slightly more opaque background */
+    border: 1px solid white; /* White border around dropdown */
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%; /* Full width of the dropdown container */
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+    max-height: 200px; /* Set a maximum height */
+    overflow-y: auto; /* Add scroll if content overflows */
+    z-index: 999; /* Ensure it is on top of other elements, but below the popup */
+}
+
+
+/* Checkbox Item */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    margin-bottom: 5px;
+    justify-content: flex-start; /* Ensures content is aligned to the left */
+
+
+}
+
+.checkbox-item input {
+    margin-right: 10px;
+}
+
+.checkbox-item:hover {
+    background-color: rgba(255, 75, 75, 0.5); /* Slightly more opaque background */
+}
+
+
+
+
+
+
+/* Styles for image preview */
+.image-preview {
+    display: flex;
+    flex-wrap: wrap; /* Allow images to wrap to the next line if needed */
+    gap: 10px; /* Space between images */
+}
+
+.image-preview img {
+    max-width: 150px; /* Set the maximum width for the images */
+    max-height: 150px; /* Set the maximum height for the images */
+    object-fit: cover; /* Ensure images cover the area without distortion */
+    border-radius: 5px; /* Optional: add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Optional: add shadow for better visual effect */
+}
+
+.checkbox-item label {
+    display: flex;
+}

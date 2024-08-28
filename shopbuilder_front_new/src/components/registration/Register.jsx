@@ -3,8 +3,9 @@ import './Register.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faEye, faEyeSlash, faUser, faPhone } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const Register = ({ showLogin }) => {
+const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ const Register = ({ showLogin }) => {
     password: '',
     confirmPassword: ''
   });
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -39,7 +42,7 @@ const Register = ({ showLogin }) => {
     try {
       const response = await axios.post('http://localhost:8088/api/register', formData);
       alert(response.data);
-      showLogin();
+      navigate('/login'); // Redirect to login page
     } catch (error) {
       alert(error.response ? error.response.data : "Erreur d'inscription");
     }
@@ -49,7 +52,7 @@ const Register = ({ showLogin }) => {
       <div className="register-box">
         <div className="login-container">
           <h3>J'ai déjà un compte ShopBuilder </h3>
-          <button className='Button_sign_up' onClick={showLogin}>SE CONNECTER</button>
+          <button className='Button_sign_up' onClick={() => navigate('/login')}>SE CONNECTER</button>
         </div>
         <div className="register-container">
           <h2>Saisissez vos informations pour continuer.</h2>

@@ -1,12 +1,18 @@
 package com.wordpress.shopBuilder.config;
 
+import com.wordpress.shopBuilder.model.Role;
 import com.wordpress.shopBuilder.model.User;
 import com.wordpress.shopBuilder.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -23,7 +29,13 @@ public class MyUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-//                .roles(user.getRole()) // Ensure to set roles if you have them
+                .authorities(mapRolesToAuthorities(user.getRoles())) // Set roles as authorities
                 .build();
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 }
